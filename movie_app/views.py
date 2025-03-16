@@ -12,7 +12,7 @@ class DirectorListView(generics.ListCreateAPIView):
 
 
 
-class DirectorDetailView(generics.RetrieveAPIView):
+class DirectorDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Director.objects.all()
     serializer_class = DirectorSerializer
 
@@ -24,8 +24,7 @@ class MovieListView(generics.ListCreateAPIView):
 
 
 
-
-class MovieDetailView(generics.RetrieveAPIView):
+class MovieDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
 
@@ -37,10 +36,14 @@ class ReviewListView(generics.ListCreateAPIView):
 
 
 
-class ReviewDetailView(generics.RetrieveAPIView):
+class ReviewDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
 
 
+
+class MovieWithReviewsView(generics.ListAPIView):
+    queryset = Movie.objects.all()
+    serializer_class = MovieSerializer
 
 
