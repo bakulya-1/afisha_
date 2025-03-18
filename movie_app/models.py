@@ -1,5 +1,4 @@
 from django.db import models
-from django.db import models
 
 class Director(models.Model):
     name = models.CharField(max_length=255)
@@ -15,6 +14,13 @@ class Movie(models.Model):
 
     def __str__(self):
         return self.title
+
+    def average_rating(self):
+        reviews = self.reviews.all()
+        if reviews.exists():
+            total_stars = sum([review.stars for review in reviews])
+            return total_stars / reviews.count()
+        return 0
 
 class Review(models.Model):
     text = models.TextField()

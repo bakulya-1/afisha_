@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.db.models import Avg
 from rest_framework.serializers import raise_errors_on_nested_writes
-
+from django.db import models
 from .models import Director, Movie, Review
 
 
@@ -23,11 +23,11 @@ class MovieSerializer(serializers.ModelSerializer):
 
 
     def get_reviews(self, obj):
-        reviews = Review.objects.filter(movie=obj)
-        return ReviewSerializer(reviews, many=tuple).data
+        reviews = obj.reviews.all()
+        return ReviewSerializer(reviews, many=True).data
 
     def get_rating(self, obj):
-        reviews = Review.objects.filter(movie=obj)
+        reviews = obj.reviews.all()
         if reviews.exists():
             average_rating = reviews.aggregate(models.Avg('stars'))['stars__avg']
             return round(average_rating, 2)
