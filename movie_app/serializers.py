@@ -9,7 +9,7 @@ class DirectorSerializer(serializers.ModelSerializer):
     movie_count = serializers.IntegerField(source='movies.count', read_only=True)
     class Meta:
         model = Director
-        fields = ['id', 'name', 'movies_count']
+        fields = ['id', 'name', 'movie_count']
 
 
 class MovieSerializer(serializers.ModelSerializer):
@@ -29,13 +29,13 @@ class MovieSerializer(serializers.ModelSerializer):
     def get_rating(self, obj):
         reviews = obj.reviews.all()
         if reviews.exists():
-            average_rating = reviews.aggregate(models.Avg('stars'))['stars__avg']
+            average_rating = reviews.aggregate(Avg('stars'))['stars__avg']
             return round(average_rating, 2)
         return None
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    movie = MovieSerializer()
+    movie = serializers.PrimaryKeyRelatedField(queryset=Movie.objects.all())
 
     class Meta:
         model = Review
